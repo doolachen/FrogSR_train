@@ -1,4 +1,4 @@
-from os import listdir
+from os import listdir, makedirs
 from os import path as osp
 
 from fogsr.datasets.lmdb_util import make_lmdb_from_imgs
@@ -15,6 +15,7 @@ def create_lmdb_for_ugc():
     lmdb_path = osp.expanduser('~/dataset/ugc-dataset-lmdb/vp9_compressed_videos/train_GT.lmdb')
     img_path_list, keys = prepare_keys_ugc(folder_path, train_list,
                                                 'gt')
+    makedirs(osp.dirname(lmdb_path), exist_ok=True)
     make_lmdb_from_imgs(
         folder_path, lmdb_path, img_path_list, keys, multiprocessing_read=True)
 
@@ -23,6 +24,7 @@ def create_lmdb_for_ugc():
     lmdb_path = osp.expanduser('~/dataset/ugc-dataset-lmdb/vp9_compressed_videos/train_LR.lmdb')
     img_path_list, keys = prepare_keys_ugc(folder_path, train_list,
                                                 'lq')
+    makedirs(osp.dirname(lmdb_path), exist_ok=True)
     make_lmdb_from_imgs(
         folder_path, lmdb_path, img_path_list, keys, multiprocessing_read=True)
 
