@@ -31,7 +31,7 @@ class VRT_D(VRT):
             )
 
     def forward_features(self, x, flows_backward, flows_forward,
-                         early_exit_layer_idx_list: [(int, int)] = [(None, None)] * 7 + [None]):
+                         early_exit_layer_idx_list: list[(int, int)] = [(None, None)] * 7 + [None]):
         '''Main network for feature extraction.'''
 
         x1 = self.stage1(x, flows_backward[0::4], flows_forward[0::4], early_exit_layer_idx_list[0])

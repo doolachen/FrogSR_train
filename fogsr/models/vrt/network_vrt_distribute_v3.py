@@ -102,8 +102,8 @@ class VRT_Dv3(VRT):
                     )
 
     def forward_split(self, x, x_branch=(None, None, None, None),
-                      early_exit_layer_idx_list: [(int, int)] = [(None, None)] * 7 + [None],
-                      blocks: [str] = ['branch1', 'branch2', 'branch3', 'branch4', 'gather']):
+                      early_exit_layer_idx_list: list[(int, int)] = [(None, None)] * 7 + [None],
+                      blocks: list[str] = ['branch1', 'branch2', 'branch3', 'branch4', 'gather']):
         x, x_lq, flows_backward, flows_forward = self.forward_before(x)
         x1, x2, x3, x4 = x_branch
         x_final = None
@@ -123,7 +123,7 @@ class VRT_Dv3(VRT):
             x_final = x
         return x_final, x1, x2, x3, x4
 
-    def forward(self, x, early_exit_layer_idx_list: [(int, int)] = [(None, None)] * 7 + [None]):
+    def forward(self, x, early_exit_layer_idx_list: list[(int, int)] = [(None, None)] * 7 + [None]):
         x, x1, x2, x3, x4 = self.forward_split(x, early_exit_layer_idx_list=early_exit_layer_idx_list)
         return x
 
