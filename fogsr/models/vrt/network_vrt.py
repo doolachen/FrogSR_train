@@ -270,7 +270,7 @@ class VRT(nn.Module):
             # video fi
             raise NotImplemented("video fi not implemented")
 
-    def forward(self, x, early_exit_layer_idx_list: [(int, int)] = [(None, None)] * 7 + [None]):
+    def forward(self, x, early_exit_layer_idx_list: list[(int, int)] = [(None, None)] * 7 + [None]):
         # x: (N, D, C, H, W)
         x, x_lq, flows_backward, flows_forward = self.forward_before(x)
         features = self.forward_features(x, flows_backward, flows_forward, early_exit_layer_idx_list).transpose(1, 4)
@@ -392,7 +392,7 @@ class VRT(nn.Module):
         return [torch.stack(x_backward, 1), torch.stack(x_forward, 1)]
 
     def forward_features(self, x, flows_backward, flows_forward,
-                         early_exit_layer_idx_list: [(int, int)] = [(None, None)] * 7 + [None]):
+                         early_exit_layer_idx_list: list[(int, int)] = [(None, None)] * 7 + [None]):
         '''Main network for feature extraction.'''
 
         x1, x2, x3, x4 = self.forward_features_branches(x, flows_backward, flows_forward, early_exit_layer_idx_list)

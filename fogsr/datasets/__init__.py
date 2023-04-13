@@ -1,5 +1,5 @@
 import torch
-
+import numpy as np
 
 def restore_images(outputs: torch.Tensor):
     b, n, c, h, w = outputs.size()

@@ -1,4 +1,4 @@
-from frogsr.trainer.lightning import TestNet
+from fogsr.trainer.lightning import TestNet
 from pytorch_lightning import Trainer
 
 input_size =  784   # 28x28

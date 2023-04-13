@@ -111,7 +111,7 @@ class Stage(nn.Module):
                                                  max_residue_magnitude=max_residue_magnitude, pa_frames=pa_frames)
             self.pa_fuse = Mlp_GEGLU(dim * (1 + 2), dim * (1 + 2), dim)
 
-    def forward(self, x, flows_backward, flows_forward, early_exit_layer_idx: (int, int) = (None, None)):
+    def forward(self, x, flows_backward, flows_forward, early_exit_layer_idx: tuple(int, int) = (None, None)):
         x = self.reshape(x)
         x = self.linear1(self.residual_group1(x, early_exit_layer_idx[0]).transpose(1, 4)).transpose(1, 4) + x
         x = self.linear2(self.residual_group2(x, early_exit_layer_idx[1]).transpose(1, 4)).transpose(1, 4) + x

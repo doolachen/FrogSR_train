@@ -11,8 +11,8 @@ def create_lmdb_for_ugc():
         Remember to modify opt configurations according to your settings.
     """
     # GT
-    folder_path = osp.expanduser('~/dataset/ugc-dataset-image/vp9_compressed_videos')
-    lmdb_path = osp.expanduser('~/dataset/ugc-dataset-lmdb/vp9_compressed_videos/train_GT.lmdb')
+    folder_path = osp.expanduser('/home/cbj/dataset/ugc-dataset-image/vp9_compressed_videos')
+    lmdb_path = osp.expanduser('/home/cbj/dataset/ugc-dataset-lmdb/vp9_compressed_videos/train_GT.lmdb')
     img_path_list, keys = prepare_keys_ugc(folder_path, train_list,
                                                 'gt')
     makedirs(osp.dirname(lmdb_path), exist_ok=True)
@@ -20,8 +20,8 @@ def create_lmdb_for_ugc():
         folder_path, lmdb_path, img_path_list, keys, multiprocessing_read=True)
 
     # LQ
-    folder_path = osp.expanduser('~/dataset/ugc-dataset-image/vp9_compressed_videos_x4lossless')
-    lmdb_path = osp.expanduser('~/dataset/ugc-dataset-lmdb/vp9_compressed_videos/train_LR.lmdb')
+    folder_path = osp.expanduser('/home/cbj/dataset/ugc-dataset-image/vp9_compressed_videos_x4lossless')
+    lmdb_path = osp.expanduser('/home/cbj/dataset/ugc-dataset-lmdb/vp9_compressed_videos/train_LR.lmdb')
     img_path_list, keys = prepare_keys_ugc(folder_path, train_list,
                                                 'lq')
     makedirs(osp.dirname(lmdb_path), exist_ok=True)
