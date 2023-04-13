@@ -1,6 +1,5 @@
 import json
 import re
-from fogsr.datasets.config import *
 
 config = {}
 
@@ -18,12 +17,7 @@ VRT_videosr_6frames = dict(
 VRT_videosr_bi_REDS_6frames = dict(
     model=dict(
         **VRT_videosr_6frames,
-        name='VRT',
         pretrained_url='https://github.com/JingyunLiang/VRT/releases/download/v0.0/001_VRT_videosr_bi_REDS_6frames.pth'
-    ),
-    dataset=dict(
-        train={**reds['train'], **dict(crop_size=[256, 256], num_frames=6)},
-        validate={**reds_full['validate'], **dict(num_frames=None)},
     ),
     wrapper=dict(
         name='fogsr.trainer.VRTLightningWrapper',
@@ -52,12 +46,7 @@ VRT_videosr_16frames = dict(
 VRT_videosr_bi_REDS_16frames = dict(
     model=dict(
         **VRT_videosr_16frames,
-        name='VRT',
         pretrained_url='https://github.com/JingyunLiang/VRT/releases/download/v0.0/002_VRT_videosr_bi_REDS_16frames.pth'
-    ),
-    dataset=dict(
-        train={**reds['train'], **dict(crop_size=[256, 256], num_frames=16)},
-        validate={**reds_full['validate'], **dict(num_frames=None)},
     ),
     wrapper=dict(
         name='fogsr.trainer.VRTLightningWrapper',
@@ -81,8 +70,6 @@ config = dict(
 
 def to_vid4_bdx4(conf):
     conf = json.loads(json.dumps(conf))
-    conf['dataset']['validate'] = json.loads(json.dumps(vid4_bdx4['validate']))
-    conf['dataset']['validate']['num_frames'] = None
     conf['wrapper']['test_args'] = {**conf['wrapper']['test_args'], **dict(
         lq_clip=[7, 64, 64],
     )}
@@ -91,8 +78,6 @@ def to_vid4_bdx4(conf):
 
 def to_vid4_bix4(conf):
     conf = json.loads(json.dumps(conf))
-    conf['dataset']['validate'] = json.loads(json.dumps(vid4_bix4['validate']))
-    conf['dataset']['validate']['num_frames'] = None
     conf['wrapper']['test_args'] = {**conf['wrapper']['test_args'], **dict(
         lq_clip=[7, 64, 64],
     )}
@@ -113,12 +98,7 @@ VRT_videosr_7frames = dict(
 VRT_videosr_bi_Vimeo_7frames = dict(
     model=dict(
         **VRT_videosr_7frames,
-        name='VRT',
         pretrained_url='https://github.com/JingyunLiang/VRT/releases/download/v0.0/003_VRT_videosr_bi_Vimeo_7frames.pth'
-    ),
-    dataset=dict(
-        train={**vimeo_bi['train'], **dict(crop_size=[256, 256], num_frames=7)},
-        validate={**vimeo_bi_full['validate'], **dict(num_frames=7)},
     ),
     wrapper=dict(
         name='fogsr.trainer.VRTLightningWrapper',
@@ -137,12 +117,7 @@ VRT_videosr_bi_Vimeo_7frames_vid4 = to_vid4_bix4(VRT_videosr_bi_Vimeo_7frames)
 VRT_videosr_bd_Vimeo_7frames = dict(
     model=dict(
         **VRT_videosr_7frames,
-        name='VRT',
         pretrained_url='https://github.com/JingyunLiang/VRT/releases/download/v0.0/004_VRT_videosr_bd_Vimeo_7frames.pth'
-    ),
-    dataset=dict(
-        train={**vimeo_bd['train'], **dict(crop_size=[256, 256], num_frames=7)},
-        validate={**vimeo_bd_full['validate'], **dict(num_frames=7)},
     ),
     wrapper=dict(
         name='fogsr.trainer.VRTLightningWrapper',
@@ -289,13 +264,11 @@ for base_name, base_conf in list(config.items()):
 
 def to_distribution(conf):
     conf = json.loads(json.dumps(conf))
-    conf['model']['name'] = 'VRT-D'
     return conf
 
 
 def to_distribution_v2(conf):
     conf = json.loads(json.dumps(conf))
-    conf['model']['name'] = 'VRT-D-v2'
     conf['wrapper']['name'] = 'fogsr.trainer.VRTDLightningWrapper'
     conf['wrapper']['blocks'] = dict(
         branch=['branch1', 'branch2', 'branch3', 'branch4'],
@@ -306,13 +279,11 @@ def to_distribution_v2(conf):
 
 def to_distribution_v2q(conf):
     conf = to_distribution_v2(conf)
-    conf['model']['name'] = 'VRT-D-v2-Q'
     return conf
 
 
 def to_distribution_v2cq(conf):
     conf = to_distribution_v2q(conf)
-    conf['model']['name'] = 'VRT-D-v2-CQ'
     conf['model']['compress_on_dim'] = 1
     conf['model']['compressed_dims'] = 48
     return conf
@@ -320,7 +291,6 @@ def to_distribution_v2cq(conf):
 
 def to_distribution_v2dcq(conf):
     conf = to_distribution_v2q(conf)
-    conf['model']['name'] = 'VRT-D-v2-DCQ'
     conf['model']['compressed_dims'] = 48
     conf['model']['compress_kernel_size'] = 3
     return conf
@@ -349,7 +319,6 @@ for base_name, base_conf in list(config.items()):
 
 def to_distribution_v3(conf):
     conf = json.loads(json.dumps(conf))
-    conf['model']['name'] = 'VRT-D-v3'
     conf['wrapper']['name'] = 'fogsr.trainer.VRTDLightningWrapper'
     del conf['model']['depths']
     conf['model']['depths_v3'] = [8, [4, 4], [3, 3, 2], [2, 2, 2, 2], 8, 8, 8, 4, 4, 4, 4, 4, 4]
@@ -363,13 +332,11 @@ def to_distribution_v3(conf):
 
 def to_distribution_v3q(conf):
     conf = to_distribution_v3(conf)
-    conf['model']['name'] = 'VRT-D-v3-Q'
     return conf
 
 
 def to_distribution_v3cq(conf):
     conf = to_distribution_v3q(conf)
-    conf['model']['name'] = 'VRT-D-v3-CQ'
     conf['model']['compress_on_dim'] = 1
     conf['model']['compressed_dims'] = 48
     return conf
@@ -377,7 +344,6 @@ def to_distribution_v3cq(conf):
 
 def to_distribution_v3dcq(conf):
     conf = to_distribution_v3q(conf)
-    conf['model']['name'] = 'VRT-D-v3-DCQ'
     conf['model']['compressed_dims'] = 48
     conf['model']['compress_kernel_size'] = 3
     return conf
