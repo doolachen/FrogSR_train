@@ -13,7 +13,7 @@ from fogsr.utils.registry import DATASET_REGISTRY
 
 def convert_color(img):
     img = img # TODO: 有误差，不够精确
-    img = cv2.cvtColor(img, cv2.COLOR_YUV2RGB_I420)
+    img = cv2.cvtColor(img, cv2.COLOR_YUV2BGR_I420)
     return img.astype(np.float32) / 255.
 
 @DATASET_REGISTRY.register()
@@ -114,7 +114,7 @@ class UGCDataset(data.Dataset):
         # ensure not exceeding the borders
         start_frame_idx = int(frame_name)
         if start_frame_idx > 100 - self.num_frame * interval:
-            start_frame_idx = random.randint(0, 100 - self.num_frame * interval)
+            start_frame_idx = random.randint(1, 100 - self.num_frame * interval)
         end_frame_idx = start_frame_idx + self.num_frame * interval
 
         neighbor_list = list(range(start_frame_idx, end_frame_idx, interval))

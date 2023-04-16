@@ -64,7 +64,8 @@ def main(mode='folder'):
         for j in range(opt['num_frame']):
             torchvision.utils.save_image(
                 lq[:, j, :, :, :], f'tmp/lq_{i:03d}_frame{j}.png', nrow=nrow, padding=padding, normalize=False)
-        torchvision.utils.save_image(gt, f'tmp/gt_{i:03d}.png', nrow=nrow, padding=padding, normalize=False)
+            torchvision.utils.save_image(
+                gt[:, j, :, :, :], f'tmp/gt_{i:03d}_frame{j}.png', nrow=nrow, padding=padding, normalize=False)
 
 
 if __name__ == '__main__':
