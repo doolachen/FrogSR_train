@@ -6,7 +6,7 @@ from fogsr.data import build_dataloader, build_dataset
 
 
 def main(mode='folder'):
-    """Test reds dataset.
+    """Test UGC dataset.
     Args:
         mode: There are two modes: 'lmdb', 'folder'.
     """
@@ -17,14 +17,14 @@ def main(mode='folder'):
     opt['name'] = 'UGC'
     opt['type'] = 'UGCDataset'
     if mode == 'folder':
-        opt['dataroot_gt'] = '/home/cbj/dataset/REDS/train/train_sharp'
-        opt['dataroot_lq'] = '/home/cbj/dataset/REDS/train/train_sharp_bicubic'
+        opt['dataroot_gt'] = '/home/cbj/dataset/ugc-dataset-image/original_videos_h264'
+        opt['dataroot_lq'] = '/home/cbj/dataset/ugc-dataset-image/original_videos_h264_x4lossless'
         opt['dataroot_flow'] = None
         opt['meta_info_file'] = 'fogsr/data/meta_info/meta_info_REDS_GT.txt'
         opt['io_backend'] = dict(type='disk')
     elif mode == 'lmdb':
-        opt['dataroot_gt'] = '/home/cbj/dataset/REDS/train/train_sharp_with_val.lmdb'
-        opt['dataroot_lq'] = '/home/cbj/dataset/REDS/train/train_sharp_bicubic_with_val.lmdb'
+        opt['dataroot_gt'] = '/home/cbj/dataset/ugc-dataset-lmdb/original_videos_h264/train_GT.lmdb'
+        opt['dataroot_lq'] = '/home/cbj/dataset/ugc-dataset-lmdb/original_videos_h264/train_LR.lmdb'
         opt['dataroot_flow'] = None
         opt['meta_info_file'] = 'fogsr/data/meta_info/meta_info_REDS_GT.txt'
         opt['io_backend'] = dict(type='lmdb')

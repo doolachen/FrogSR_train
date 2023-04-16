@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import torch
+import os
 from pathlib import Path
 from torch.utils import data as data
 
@@ -56,10 +57,10 @@ class UGCDataset(data.Dataset):
         self.num_half_frames = opt['num_frame'] // 2
 
         self.keys = []
-        with open(opt['meta_info_file'], 'r') as fin:
-            for line in fin:
-                folder, frame_num, _ = line.split(' ')
-                self.keys.extend([f'{folder}/{i:08d}' for i in range(int(frame_num))])
+        for folder in os.listdir(opt['dataroot_gt']):
+            for frame in os.listdir(os.path.join(opt['dataroot_gt'], folder)):
+                frame_num = int(os.path.splitext(frame)[0])
+                self.keys.append(f'{folder}/{frame_num:03d}')
 
         # remove the video clips used in validation
         if opt['val_partition'] == 'UGC4':
@@ -113,7 +114,7 @@ class UGCDataset(data.Dataset):
             center_frame_idx = random.randint(0, 99)
             start_frame_idx = (center_frame_idx - self.num_half_frames * interval)
             end_frame_idx = center_frame_idx + self.num_half_frames * interval
-        frame_name = f'{center_frame_idx:08d}'
+        frame_name = f'{center_frame_idx:03d}'
         neighbor_list = list(range(start_frame_idx, end_frame_idx + 1, interval))
         # random reverse
         if self.random_reverse and random.random() < 0.5:
@@ -133,9 +134,9 @@ class UGCDataset(data.Dataset):
         img_lqs = []
         for neighbor in neighbor_list:
             if self.is_lmdb:
-                img_lq_path = f'{clip_name}/{neighbor:08d}'
+                img_lq_path = f'{clip_name}/{neighbor:03d}'
             else:
-                img_lq_path = self.lq_root / clip_name / f'{neighbor:08d}.png'
+                img_lq_path = self.lq_root / clip_name / f'{neighbor:03d}.png'
             img_bytes = self.file_client.get(img_lq_path, 'lq')
             img_lq = imfrombytes(img_bytes, float32=True)
             img_lqs.append(img_lq)
