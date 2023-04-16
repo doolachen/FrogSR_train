@@ -15,8 +15,26 @@ os.makedirs(path, exist_ok=True)
 def model_large():
     from fogsr.models.vrt import VRT_Dv3
     from fogsr.models.vrt import VRTDv3_videosr_bi_Vimeo_7frames
+    model = VRT_Dv3(**VRTDv3_videosr_bi_Vimeo_7frames['model'])
     test_args = VRTDv3_videosr_bi_Vimeo_7frames['wrapper']['test_args']
-    return VRT_Dv3(**VRTDv3_videosr_bi_Vimeo_7frames['model']), test_args
+    model.load_state_dict(torch.load("/home/cbj/models/VRTDv3_videosr_bi_Vimeo_7frames.pth"))
+    return model, test_args
+
+def model_medium():
+    from fogsr.models.vrt import VRT_Dv3
+    from fogsr.models.vrt import VRTDv3SmallDepthsTail_videosr_bi_Vimeo_7frames
+    model = VRT_Dv3(**VRTDv3SmallDepthsTail_videosr_bi_Vimeo_7frames['model'])
+    test_args = VRTDv3SmallDepthsTail_videosr_bi_Vimeo_7frames['wrapper']['test_args']
+    model.load_state_dict(torch.load("/home/cbj/models/VRTDv3SmallDepthsTail_videosr_bi_Vimeo_7frames.pth"))
+    return model, test_args
+
+def model_small():
+    from fogsr.models.vrt import VRT_Dv3
+    from fogsr.models.vrt import VRTDv3UltimateSmall_videosr_bi_Vimeo_7frames
+    model = VRT_Dv3(**VRTDv3UltimateSmall_videosr_bi_Vimeo_7frames['model'])
+    test_args = VRTDv3UltimateSmall_videosr_bi_Vimeo_7frames['wrapper']['test_args']
+    model.load_state_dict(torch.load("/home/cbj/models/VRTDv3UltimateSmall_videosr_bi_Vimeo_7frames.pth"))
+    return model, test_args
 
 def dataloader_ugc():
     pass
@@ -26,7 +44,7 @@ def dataloader_reds():
     return REDS_dataloader()
 
 def main():
-    model, test_args = model_large()
+    model, test_args = model_medium()
     test_loader = dataloader_reds()
 
     model.eval()
