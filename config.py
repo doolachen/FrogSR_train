@@ -12,7 +12,7 @@ def REDS_opt(mode='folder'):
     opt['phase'] = 'train'
 
     opt['name'] = 'REDS'
-    opt['type'] = 'REDSDataset'
+    opt['type'] = 'REDSRecurrentDataset'
     if mode == 'folder':
         opt['dataroot_gt'] = '/home/cbj/dataset/REDS/train/train_sharp'
         opt['dataroot_lq'] = '/home/cbj/dataset/REDS/train/train_sharp_bicubic'
@@ -26,14 +26,15 @@ def REDS_opt(mode='folder'):
         opt['meta_info_file'] = 'fogsr/data/meta_info/meta_info_REDS_GT.txt'
         opt['io_backend'] = dict(type='lmdb')
 
-    opt['val_partition'] = 'REDS4'
+    opt['val_partition'] = 'official'
     opt['num_frame'] = 7
     opt['gt_size'] = 256
     opt['interval_list'] = [1]
     opt['random_reverse'] = True
     opt['use_hflip'] = True
     opt['use_rot'] = True
-
+    opt['test_mode'] = False
+    
     opt['num_worker_per_gpu'] = 1
     opt['batch_size_per_gpu'] = 2
     opt['scale'] = 4
