@@ -12,9 +12,9 @@ from fogsr.utils.flow_util import dequantize_flow
 from fogsr.utils.registry import DATASET_REGISTRY
 
 def convert_color(img):
-    img = img.astype(np.float32)
+    img = img # TODO: 有误差，不够精确
     img = cv2.cvtColor(img, cv2.COLOR_YUV2RGB_I420)
-    return img / 255.
+    return img.astype(np.float32) / 255.
 
 @DATASET_REGISTRY.register()
 class UGCDataset(data.Dataset):
