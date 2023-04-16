@@ -1,4 +1,5 @@
 lightning_logs
+tmp
 
 secret.py
 # Byte-compiled / optimized / DLL files
