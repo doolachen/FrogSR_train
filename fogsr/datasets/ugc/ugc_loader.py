@@ -44,7 +44,7 @@ def ugc_loader(mode='folder',test=False):
 
     opt['dataset_enlarge_ratio'] = 1
 
-    os.makedirs('tmp', exist_ok=True)
+    # os.makedirs('tmp', exist_ok=True)
 
     dataset = build_dataset(opt)
     data_loader = build_dataloader(dataset, opt, num_gpu=0, dist=opt['dist'], sampler=None)

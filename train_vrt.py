@@ -5,7 +5,7 @@ from fogsr.datasets.ugc.ugc_loader import ugc_loader
 
 trainer_conf=dict(
         accelerator='gpu',
-        devices=8,
+        devices=[0,1,2,3,4,5,6,7],
         min_steps=800000,
         max_steps=800000,
         val_check_interval=1000,
