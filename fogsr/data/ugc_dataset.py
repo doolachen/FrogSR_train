@@ -5,6 +5,7 @@ from pathlib import Path
 import os
 from torch.utils import data as data
 import cv2
+import math
 
 from fogsr.data.transforms import augment, paired_random_crop
 from fogsr.utils import FileClient, get_root_logger, imfrombytes, img2tensor
@@ -60,10 +61,17 @@ class UGCDataset(data.Dataset):
 
         self.keys = []
         for folder in os.listdir(opt['dataroot_gt']):
+            num = math.floor(len(os.listdir(os.path.join(opt['dataroot_gt'], folder)))*0.75)
             for frame in os.listdir(os.path.join(opt['dataroot_gt'], folder)):
                 frame_num = int(os.path.splitext(frame)[0])
-                self.keys.append(f'{folder}/{frame_num:03d}')
-
+                # self.keys.append(f'{folder}/{frame_num:03d}')
+                if opt['test_mode']:
+                    if frame_num > num:
+                        self.keys.append(f'{folder}/{frame_num:03d}')
+                else:
+                    if frame_num <= num:
+                        self.keys.append(f'{folder}/{frame_num:03d}')
+                
         # remove the video clips used in validation
         '''
         if opt['val_partition'] == 'REDS4':
@@ -78,6 +86,8 @@ class UGCDataset(data.Dataset):
         else:
             self.keys = [v for v in self.keys if v.split('/')[0] not in val_partition]
         '''
+        val_partition = [f'{v:03d}' for v in range(450, 270)]
+        
         # file client (io backend)
         self.file_client = None
         self.io_backend_opt = opt['io_backend']

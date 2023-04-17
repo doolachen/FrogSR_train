@@ -5,7 +5,7 @@ import torchvision.utils
 from fogsr.data import build_dataloader, build_dataset
 
 
-def main(mode='folder',test=False):
+def ugc_loader(mode='folder',test=False):
     """Test UGC dataset.
     Args:
         mode: There are two modes: 'lmdb', 'folder'.
@@ -30,16 +30,16 @@ def main(mode='folder',test=False):
         opt['io_backend'] = dict(type='lmdb')
 
     opt['val_partition'] = 'UGC4'
-    opt['num_frame'] = 5
+    opt['num_frame'] = 7
     opt['gt_size'] = 256
     opt['interval_list'] = [1]
     opt['random_reverse'] = True
     opt['use_hflip'] = True
     opt['use_rot'] = True
-
     opt['test_mode'] = test
-    opt['num_worker_per_gpu'] = 1
-    opt['batch_size_per_gpu'] = 16
+
+    opt['num_worker_per_gpu'] = 52
+    opt['batch_size_per_gpu'] = 1
     opt['scale'] = 4
 
     opt['dataset_enlarge_ratio'] = 1
@@ -49,25 +49,4 @@ def main(mode='folder',test=False):
     dataset = build_dataset(opt)
     data_loader = build_dataloader(dataset, opt, num_gpu=0, dist=opt['dist'], sampler=None)
 
-    nrow = int(math.sqrt(opt['batch_size_per_gpu']))
-    padding = 2 if opt['phase'] == 'train' else 0
-
-    print('start...')
-    for i, data in enumerate(data_loader):
-        if i > 5:
-            break
-        print(i)
-
-        lq = data['lq']
-        gt = data['gt']
-        key = data['key']
-        print(key)
-        for j in range(opt['num_frame']):
-            torchvision.utils.save_image(
-                lq[:, j, :, :, :], f'tmp/lq_{i:03d}_frame{j}.png', nrow=nrow, padding=padding, normalize=False)
-            torchvision.utils.save_image(
-                gt[:, j, :, :, :], f'tmp/gt_{i:03d}_frame{j}.png', nrow=nrow, padding=padding, normalize=False)
-
-
-if __name__ == '__main__':
-    main()
+    return data_loader

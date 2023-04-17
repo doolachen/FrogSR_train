@@ -4,7 +4,7 @@ from .overlap import calculate_overlap_list, calculate_bigger_overlap_list, calc
 
 
 def test_vrt(video, video_branch, model,
-             blocks: [str] = ['branch1', 'branch2', 'branch3', 'branch4', 'gather'], **kwargs):
+             blocks: list[str] = ['branch1', 'branch2', 'branch3', 'branch4', 'gather'], **kwargs):
     return test_video_cut_overlap(video, video_branch, model, blocks=blocks, **kwargs)
 
 
@@ -49,7 +49,7 @@ def test_clip(clip_in, clip_in_branch, model, blocks, max_batch_size=16):
 
 
 def test_video_cut_overlap(video, video_branch, model,
-                           blocks: [str] = ['branch1', 'branch2', 'branch3', 'branch4', 'gather'],
+                           blocks: list[str] = ['branch1', 'branch2', 'branch3', 'branch4', 'gather'],
                            scale=4,
                            scale_branch=[1, 2, 4, 8],
                            channel_branch=[120, 120, 120, 120],
