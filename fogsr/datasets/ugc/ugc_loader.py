@@ -38,7 +38,7 @@ def ugc_loader(mode='folder',test=False):
     opt['use_rot'] = True
     opt['test_mode'] = test
 
-    opt['num_worker_per_gpu'] = 52
+    opt['num_worker_per_gpu'] = 1
     opt['batch_size_per_gpu'] = 1
     opt['scale'] = 4
 

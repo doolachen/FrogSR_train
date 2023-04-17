@@ -5,12 +5,12 @@ from fogsr.datasets.ugc.ugc_loader import ugc_loader
 
 trainer_conf=dict(
         accelerator='gpu',
-        devices=1,
+        devices=8,
         min_steps=800000,
         max_steps=800000,
         val_check_interval=1000,
         limit_val_batches=100,
-        log_every_n_steps=1
+        log_every_n_steps=1,
 )
 
 optimizer_conf=dict(
