@@ -27,7 +27,7 @@ VRT_videosr_bi_REDS_6frames = dict(
             lq_clip=[6, 64, 64],
             scale_branch=[1, 2, 4, 8],
             channel_branch=[120, 120, 120, 120],
-            max_batch_size=16
+            max_batch_size=8
         )
     ),
 )
@@ -56,7 +56,7 @@ VRT_videosr_bi_REDS_16frames = dict(
             lq_clip=[16, 64, 64],
             scale_branch=[1, 2, 4, 8],
             channel_branch=[120, 120, 120, 120],
-            max_batch_size=16
+            max_batch_size=8
         )
     ),
 )
@@ -108,7 +108,7 @@ VRT_videosr_bi_Vimeo_7frames = dict(
             lq_clip=[7, 64, 64],
             scale_branch=[1, 2, 4, 8],
             channel_branch=[120, 120, 120, 120],
-            max_batch_size=16
+            max_batch_size=8
         )
     ),
 )
@@ -127,7 +127,7 @@ VRT_videosr_bd_Vimeo_7frames = dict(
             lq_clip=[7, 64, 64],
             scale_branch=[1, 2, 4, 8],
             channel_branch=[120, 120, 120, 120],
-            max_batch_size=16
+            max_batch_size=8
         )
     ),
 )

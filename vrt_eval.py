@@ -35,14 +35,12 @@ hr_root = os.path.join("tmp", "vrt_test")
 
 
 def main(n=7):
-    '''
     model, test_args = model_small()
 
     model.eval()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Model to {device}")
     model = model.to(device)
-    '''
     
     for video in os.listdir(lq_root):
         frames = sorted(os.listdir(os.path.join(lq_root, video)))
@@ -55,7 +53,7 @@ def main(n=7):
                 batch_images.append(image)
             batch_images = img2tensor(batch_images)
             lq = torch.stack([torch.from_numpy(np.stack(batch_images))])
-            # output = test_vrt(lq, model, **test_args)
+            output = test_vrt(lq, model, **test_args)
             output = lq
             hr_frame = output[:,n-1,...]
             os.makedirs(os.path.join(hr_root, str(n), video), exist_ok=True)
