@@ -2,7 +2,7 @@ from fogsr.trainer.vrt_trainer import VRTNet
 from pytorch_lightning import Trainer
 from vrt_test import model_small
 from fogsr.datasets.ugc.ugc_loader import ugc_loader
-
+from pytorch_lightning.callbacks import ModelCheckpoint
 trainer_conf=dict(
         accelerator='gpu',
         devices=[0,1,2,3,4,5,6,7],
@@ -24,7 +24,9 @@ scheduler_conf=dict(
 )
 
 if __name__ == '__main__':
-    trainer = Trainer(**trainer_conf)
+        
+    checkpoint_callback = ModelCheckpoint(save_top_k=-1)
+    trainer = Trainer(**trainer_conf,callbacks=[checkpoint_callback])
     model,test_args = model_small()
     train_loader, val_loader = ugc_loader(test=False),ugc_loader(test=True)
     
