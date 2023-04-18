@@ -8,6 +8,8 @@ from skimage.metrics import peak_signal_noise_ratio
 from fogsr.datasets import restore_images
 from fogsr.trainer.loss import structural_similarity
 from fogsr.trainer.vrt_util import test_vrt
+from fogsr.data.ugc_dataset import convert_color, img2tensor
+import torchvision.utils
 import torch
 import torch.nn as nn
 
@@ -49,16 +51,17 @@ def main(n=7):
             batch_images = []
             for batch_frame in batch_frames:
                 image = cv2.imread(os.path.join(lq_root, video, batch_frame), cv2.IMREAD_UNCHANGED)
-                image = cv2.cvtColor(image, cv2.COLOR_YUV2BGR_I420).astype(np.float32) / 255.
+                image = convert_color(image)
                 batch_images.append(image)
+            batch_images = img2tensor(batch_images)
             lq = torch.stack([torch.from_numpy(np.stack(batch_images))])
             # output = test_vrt(lq, model, **test_args)
             output = lq
-            hr_frame = output[0,n-1,...]
-            print(batch_frames[-1], hr_frame.shape)
-            hr_frame = (hr_frame * 255.).numpy().astype(np.int8)
+            hr_frame = output[:,n-1,...]
             os.makedirs(os.path.join(hr_root, str(n), video), exist_ok=True)
-            cv2.imwrite(os.path.join(hr_root, str(n), video, batch_frames[-1]), hr_frame)
+            print(hr_frame.shape)
+            torchvision.utils.save_image(
+                hr_frame, os.path.join(hr_root, str(n), video, batch_frames[-1]), nrow=1, normalize=False)
 
 
 if __name__ == '__main__':
