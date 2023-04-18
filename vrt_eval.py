@@ -53,14 +53,14 @@ def main(n=7):
                 batch_images.append(image)
             batch_images = img2tensor(batch_images)
             lq = torch.stack([torch.from_numpy(np.stack(batch_images))]).to(device)
-            output = test_vrt(lq, model, **test_args)
-            output = lq
-            hr_frame = output[:,n-1,...]
+            output = test_vrt(lq, model, device=device, **test_args)
+            hr_frame = output[:,n//2,...]
             os.makedirs(os.path.join(hr_root, str(n), video), exist_ok=True)
             print(hr_frame.shape)
             torchvision.utils.save_image(
-                hr_frame, os.path.join(hr_root, str(n), video, batch_frames[-1]), nrow=1, normalize=False)
+                hr_frame, os.path.join(hr_root, str(n), video, batch_frames[n//2]), nrow=1, normalize=False)
 
 
 if __name__ == '__main__':
-    main()
+    with torch.no_grad():
+        main()
