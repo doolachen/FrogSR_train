@@ -52,7 +52,7 @@ def main(n=7):
                 image = convert_color(image)
                 batch_images.append(image)
             batch_images = img2tensor(batch_images)
-            lq = torch.stack([torch.from_numpy(np.stack(batch_images))])
+            lq = torch.stack([torch.from_numpy(np.stack(batch_images))]).to(device)
             output = test_vrt(lq, model, **test_args)
             output = lq
             hr_frame = output[:,n-1,...]
