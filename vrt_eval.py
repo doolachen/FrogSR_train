@@ -25,7 +25,7 @@ def model_small():
     from fogsr.models.vrt import VRTDv3UltimateSmall_videosr_bi_Vimeo_7frames
     model = VRT_Dv3(**VRTDv3UltimateSmall_videosr_bi_Vimeo_7frames['model'])
     test_args = VRTDv3UltimateSmall_videosr_bi_Vimeo_7frames['wrapper']['test_args']
-    ckpt = torch.load(os.path.expanduser("~/FrogSR_train/lightning_logs/version_0/checkpoints/epoch=2-step=35998.ckpt"))
+    ckpt = torch.load(os.path.expanduser("~/FrogSR_train/lightning_logs/version_0/checkpoints/epoch=3-step=65997.ckpt"))
     Wrapper(model).load_state_dict(ckpt["state_dict"])
     return model, test_args
 
@@ -34,7 +34,7 @@ lq_root = os.path.expanduser('~/dataset/ugc-dataset-image/original_videos_h264_x
 hr_root = os.path.join("tmp", "vrt_test")
 
 
-def main(n=7):
+def main(n=3):
     model, test_args = model_small()
 
     model.eval()
