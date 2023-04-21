@@ -85,9 +85,16 @@ def main(n=5):
     for _ in range(16):
         hr_writer.apply_async(func=batch_hr_writer)
 
+    model, test_args = model_small()
+
+    model.eval()
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print(f"Model to {device}")
+    model = model.to(device)
+    
     while True:
         video, batch_frames, lq = q_batch.get()
-        output = lq
+        output = test_vrt(lq.to(device), model, device=device, **test_args).to(lq.device)
         q_hr.put((output, n, video, batch_frames))
 
 
