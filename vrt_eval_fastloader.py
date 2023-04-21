@@ -20,8 +20,6 @@ class Wrapper(nn.Module):
         super().__init__()
         self.model = model
 
-q_batch = mp.Queue(16)
-q_frames = mp.Queue(16)
 
 def model_small():
     from fogsr.models.vrt import VRT_Dv3
@@ -36,13 +34,18 @@ def model_small():
 lq_root = os.path.expanduser('~/dataset/ugc-dataset-image/original_videos_h264_x4lossless')
 hr_root = os.path.join("tmp", "vrt_test")
 
+
+q_batch = mp.Queue(16)
+q_frames = mp.Queue(16)
+
+
 def batch_path_loader(n, lq_root):
     for video in os.listdir(lq_root):
         frames = sorted(os.listdir(os.path.join(lq_root, video)))
         for i in range(0, len(frames)-n):
             q_frames.put((lq_root, video, frames[i:i+n]))
-            
-    
+
+
 def batch_lq_loader():
     while True:
         lq_root, video, batch_frames = q_frames.get()
@@ -53,20 +56,39 @@ def batch_lq_loader():
             batch_images.append(image)
         batch_images = img2tensor(batch_images)
         lq = torch.stack([torch.from_numpy(np.stack(batch_images))])
+        print("Read", video, batch_frames, lq.shape)
         q_batch.put((video, batch_frames, lq))
 
-def main(n=3):
-    
+
+q_hr = mp.Queue(16)
+
+
+def batch_hr_writer():
+    while True:
+        output, n, video, batch_frames = q_hr.get()
+        print("Write", video, batch_frames, output.shape)
+        hr_frame = output[:,n//2,...]
+        os.makedirs(os.path.join(hr_root, str(n), video), exist_ok=True)
+        torchvision.utils.save_image(
+            hr_frame, os.path.join(hr_root, str(n), video, batch_frames[n//2]), nrow=1, normalize=False)
+
+
+def main(n=5):
     path_loader = mp.Process(target=batch_path_loader, args=(n, lq_root))
     path_loader.start()
-    
+
     lq_loader = mp.Pool(16)
     for _ in range(16):
         lq_loader.apply_async(func=batch_lq_loader)
-        
+
+    hr_writer = mp.Pool(16)
+    for _ in range(16):
+        hr_writer.apply_async(func=batch_hr_writer)
+
     while True:
         video, batch_frames, lq = q_batch.get()
-        print(video, batch_frames, lq.shape)
+        output = lq
+        q_hr.put((output, n, video, batch_frames))
 
 
 if __name__ == '__main__':
